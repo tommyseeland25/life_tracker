@@ -1,5 +1,4 @@
 import type { DailyTask, DateKey, Habit } from '../types/models'
-import { todo } from './todo'
 
 /*
  * "WHAT DOES A DAY LOOK LIKE": the daily-reset behavior from your spec.
@@ -24,7 +23,10 @@ export function toggleCheck(
   date: DateKey,
   habitId: string,
 ): Record<DateKey, string[]> {
-  return todo('toggleCheck', checks, date, habitId)
+  const current = checks[date] ?? []
+  const next = current.includes(habitId) ? current.filter((id) => id !== habitId) : [...current, habitId]
+  const { [date]: _removed, ...rest } = checks
+  return next.length > 0 ? { ...rest, [date]: next } : rest
 }
 
 /**
@@ -47,7 +49,10 @@ export function habitsForDate(
   checks: Record<DateKey, string[]>,
   date: DateKey,
 ): Habit[] {
-  return todo('habitsForDate', habits, checks, date)
+  const checked = new Set(checks[date] ?? [])
+  return habits
+    .filter((h) => checked.has(h.id) || (!h.archived && h.createdAt <= date))
+    .sort((a, b) => a.order - b.order)
 }
 
 /**
@@ -69,5 +74,11 @@ export function carryOverTasks(
   toDate: DateKey,
   newId: () => string,
 ): DailyTask[] {
-  return todo('carryOverTasks', tasks, fromDate, toDate, newId)
+  const existing = tasks.filter((t) => t.date === toDate)
+  const existingText = new Set(existing.map((t) => t.text))
+  let order = existing.reduce((max, t) => Math.max(max, t.order + 1), 0)
+  return tasks
+    .filter((t) => t.date === fromDate && !t.done && !existingText.has(t.text))
+    .sort((a, b) => a.order - b.order)
+    .map((t) => ({ id: newId(), date: toDate, text: t.text, done: false, order: order++ }))
 }

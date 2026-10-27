@@ -1,5 +1,4 @@
 import type { DateKey } from '../types/models'
-import { todo } from './todo'
 
 /*
  * DATE KEYS: the whole app is keyed by local calendar date, 'YYYY-MM-DD'.
@@ -25,17 +24,23 @@ import { todo } from './todo'
 
 /** Local date -> 'YYYY-MM-DD'. */
 export function toDateKey(date: Date): DateKey {
-  return todo('toDateKey', date)
+  const mm = String(date.getMonth() + 1).padStart(2, '0')
+  const dd = String(date.getDate()).padStart(2, '0')
+  return `${date.getFullYear()}-${mm}-${dd}`
 }
 
 /** 'YYYY-MM-DD' -> Date at local midnight. */
 export function fromDateKey(key: DateKey): Date {
-  return todo('fromDateKey', key)
+  const [y, m, d] = key.split('-').map(Number)
+  return new Date(y, m - 1, d)
 }
 
 /** Shift a key by n calendar days (n may be negative). */
 export function addDays(key: DateKey, n: number): DateKey {
-  return todo('addDays', key, n)
+  // setDate works on the calendar day, so DST's 23/25-hour days don't matter.
+  const d = fromDateKey(key)
+  d.setDate(d.getDate() + n)
+  return toDateKey(d)
 }
 
 // --- Provided for you (built on the three above) ---
