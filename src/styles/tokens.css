@@ -1,0 +1,46 @@
+/* Design tokens. Light is the default; dark applies via system setting
+   unless the user forced a theme with data-theme on <html>. */
+:root {
+  --bg: #f5f5f7;
+  --surface: rgb(255 255 255 / 0.72);
+  --surface-solid: #ffffff;
+  --text: #1d1d1f;
+  --text-muted: #6e6e73;
+  --accent: #0071e3;
+  --accent-contrast: #ffffff;
+  --hairline: rgb(0 0 0 / 0.06);
+
+  --radius-card: 24px;
+  --radius-control: 14px;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px rgb(0 0 0 / 0.06),
+    0 24px 48px rgb(0 0 0 / 0.04);
+  --blur: saturate(180%) blur(24px);
+
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    Inter, system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #000000;
+    --surface: rgb(28 28 30 / 0.72);
+    --surface-solid: #1c1c1e;
+    --text: #f5f5f7;
+    --text-muted: #98989d;
+    --accent: #2997ff;
+    --hairline: rgb(255 255 255 / 0.08);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.4);
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #000000;
+  --surface: rgb(28 28 30 / 0.72);
+  --surface-solid: #1c1c1e;
+  --text: #f5f5f7;
+  --text-muted: #98989d;
+  --accent: #2997ff;
+  --hairline: rgb(255 255 255 / 0.08);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.4);
+}
