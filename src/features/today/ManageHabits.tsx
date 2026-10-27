@@ -45,7 +45,7 @@ export function ManageHabits() {
       <form onSubmit={add} className="mt-4 flex flex-wrap gap-2">
         <TextInput aria-label="New habit" placeholder="New daily habit" value={title} onChange={(e) => setTitle(e.target.value)} className="min-w-0 flex-1" />
         <Select aria-label="Area" value={areaId} onChange={(e) => setAreaId(e.target.value)}>
-          {data.areas.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+          {data.areas.filter((a) => !a.archived).map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
         </Select>
         <Button type="submit">Add</Button>
       </form>
@@ -55,7 +55,7 @@ export function ManageHabits() {
           <li key={h.id} className="flex flex-wrap items-center gap-2">
             <TextInput aria-label="Habit name" value={h.title} onChange={(e) => patch(h.id, { title: e.target.value })} className="min-w-0 flex-1" />
             <Select aria-label="Area" value={h.areaId} onChange={(e) => patch(h.id, { areaId: e.target.value })}>
-              {data.areas.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+              {data.areas.filter((a) => !a.archived || a.id === h.areaId).map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
             </Select>
             <Button variant="ghost" aria-label={`Move ${h.title} up`} disabled={i === 0} onClick={() => move(i, -1)}>↑</Button>
             <Button variant="ghost" aria-label={`Move ${h.title} down`} disabled={i === active.length - 1} onClick={() => move(i, 1)}>↓</Button>

@@ -12,7 +12,7 @@ const TABS = [
 export function AppShell() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const active = TABS.find((t) => t.path === pathname)?.label ?? ''
+  const active = TABS.find((t) => (t.path === '/' ? pathname === '/' : pathname.startsWith(t.path)))?.label ?? ''
 
   return (
     <>
