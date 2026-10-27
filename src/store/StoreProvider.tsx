@@ -8,28 +8,37 @@ export function StoreProvider({ children, storage }: { children: ReactNode; stor
   const adapter = useRef<Storage>(storage ?? new LocalStorageAdapter())
   const [data, setData] = useState<AppData | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const loaded = useRef(false)
+  // The latest data, readable synchronously. Lets us save in the same tick as the change,
+  // so closing the tab right after an edit can't lose it.
+  const latest = useRef<AppData | null>(null)
 
   useEffect(() => {
     adapter.current.load().then(
       (d) => {
-        loaded.current = true
+        latest.current = d
         setData(d)
       },
       (e: Error) => setError(e.message),
     )
   }, [])
 
-  // Persist after every change, but never before the first load (would overwrite saved data).
-  useEffect(() => {
-    if (data && loaded.current) void adapter.current.save(data)
-  }, [data])
+  const replace = useCallback((next: AppData) => {
+    latest.current = next
+    setData(next)
+    void adapter.current.save(next)
+  }, [])
 
-  const update = useCallback((fn: (d: AppData) => AppData) => setData((d) => (d ? fn(d) : d)), [])
-  const replace = useCallback((d: AppData) => setData(d), [])
+  const update = useCallback(
+    (fn: (d: AppData) => AppData) => {
+      if (latest.current) replace(fn(latest.current))
+    },
+    [replace],
+  )
+
   const value = useMemo(() => (data ? { data, update, replace } : null), [data, update, replace])
 
   if (error) return <p className="p-8">Could not load your data: {error}</p>
+  // oxlint-disable-next-line react/refs -- false positive: update/replace read refs only when called, never during render
   if (!value) return null
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }

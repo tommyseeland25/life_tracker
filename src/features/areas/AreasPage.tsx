@@ -76,7 +76,7 @@ export function AreasPage() {
           )}
         </Card>
       ) : (
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2">
           {active.map((a) => {
             const habits = data.habits.filter((h) => h.areaId === a.id && !h.archived).length
             const last = lastEntry(a.id)

@@ -12,7 +12,7 @@ export interface HeatRow {
 export function Heatmap({ days, rows }: { days: string[]; rows: HeatRow[] }) {
   return (
     <div className="overflow-x-auto">
-      <div className="grid min-w-[22rem] items-center gap-x-1 gap-y-1.5" style={{ gridTemplateColumns: `7.5rem repeat(${days.length}, minmax(0, 1fr))` }}>
+      <div className="grid min-w-[19rem] items-center gap-x-1 gap-y-1.5" style={{ gridTemplateColumns: `minmax(4.5rem, 7.5rem) repeat(${days.length}, minmax(0, 1fr))` }}>
         <span />
         {days.map((d, i) => (
           <span key={d} className="text-center text-[10px] text-[var(--text-muted)]">

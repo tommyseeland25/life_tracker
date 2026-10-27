@@ -28,7 +28,7 @@ export function LibraryPage() {
               {books.length === 0 ? (
                 <p className="text-[var(--text-muted)]">{s.empty}</p>
               ) : (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {books.map((b) => <BookCard key={b.id} book={b} onOpen={() => setOpenId(b.id)} onMove={(to) => move(b.id, to)} />)}
                 </div>
               )}

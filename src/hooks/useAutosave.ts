@@ -28,7 +28,22 @@ export function useAutosave(value: string, onSave: (v: string) => void, delay = 
     return () => clearTimeout(t)
   }, [value, delay])
 
-  // Flush on unmount.
+  // Flush when the tab is hidden or closed, and on unmount (switching days, leaving the page).
+  useEffect(() => {
+    const flush = () => {
+      if (latest.current !== saved.current) {
+        saved.current = latest.current
+        save.current(latest.current)
+      }
+    }
+    window.addEventListener('pagehide', flush)
+    document.addEventListener('visibilitychange', flush)
+    return () => {
+      window.removeEventListener('pagehide', flush)
+      document.removeEventListener('visibilitychange', flush)
+    }
+  }, [])
+
   useEffect(
     () => () => {
       if (latest.current !== saved.current) save.current(latest.current)

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Checkbox } from '../../components/ui/Checkbox'
-import { DataCard } from './DataCard'
 
 const SAMPLE = [
   { label: 'Stretch', color: 'var(--area-3)' },
@@ -23,7 +22,7 @@ export function Showcase() {
           Tap the tabs, check things off, toggle the theme. This page is only here to lock in the look.
         </p>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
           <Card>
             <h2 className="mb-3 text-2xl font-semibold">Checklist</h2>
             {SAMPLE.map((s) => (
@@ -61,8 +60,6 @@ export function Showcase() {
               glass, corners are large, and shadows are soft and layered instead of borders.
             </p>
           </Card>
-
-          <DataCard />
         </div>
       </div>
     </>

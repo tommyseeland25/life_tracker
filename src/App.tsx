@@ -8,6 +8,7 @@ import { InsightsPage } from './features/insights/InsightsPage'
 import { JournalPage } from './features/journal/JournalPage'
 import { LibraryPage } from './features/library/LibraryPage'
 import { TodayPage } from './features/today/TodayPage'
+import { SettingsPage } from './features/settings/SettingsPage'
 import { StoreProvider } from './store/StoreProvider'
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
               <Route path="areas/:areaId" element={<AreaDetailPage />} />
               <Route path="insights" element={<InsightsPage />} />
               <Route path="library" element={<LibraryPage />} />
+              <Route path="settings" element={<SettingsPage />} />
               <Route path="design" element={<Showcase />} />
             </Route>
           </Routes>

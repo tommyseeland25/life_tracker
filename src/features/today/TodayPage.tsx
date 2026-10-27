@@ -3,18 +3,20 @@ import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Checkbox } from '../../components/ui/Checkbox'
 import { TextInput } from '../../components/ui/Input'
-import { addDays, formatLong, todayKey } from '../../lib/dates'
+import { useToday } from '../../hooks/useToday'
+import { addDays, formatLong } from '../../lib/dates'
 import { carryOverTasks, habitsForDate, toggleCheck } from '../../lib/today'
 import { useStore } from '../../store/storeContext'
 import { ManageHabits } from './ManageHabits'
 
 export function TodayPage() {
   const { data, update } = useStore()
-  const [date, setDate] = useState(todayKey)
+  const today = useToday()
+  const [date, setDate] = useState(today)
   const [managing, setManaging] = useState(false)
   const [text, setText] = useState('')
 
-  const isToday = date === todayKey()
+  const isToday = date === today
   const habits = habitsForDate(data.habits, data.checks, date)
   const checked = new Set(data.checks[date] ?? [])
   const colorOf = (areaId: string) => data.areas.find((a) => a.id === areaId)?.color
@@ -45,12 +47,12 @@ export function TodayPage() {
         </div>
         <div className="flex items-center gap-1">
           <Button variant="ghost" aria-label="Previous day" onClick={() => setDate(addDays(date, -1))}>‹</Button>
-          <Button variant="secondary" disabled={isToday} onClick={() => setDate(todayKey())}>Today</Button>
+          <Button variant="secondary" disabled={isToday} onClick={() => setDate(today)}>Today</Button>
           <Button variant="ghost" aria-label="Next day" onClick={() => setDate(addDays(date, 1))}>›</Button>
         </div>
       </div>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-2">
+      <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <div className="mb-2 flex items-center justify-between">
             <h2 className="text-2xl font-semibold">Daily habits</h2>

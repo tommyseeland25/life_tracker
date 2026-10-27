@@ -1,7 +1,8 @@
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { monthGrid } from '../../lib/calendar'
-import { formatLong, formatMonth, todayKey } from '../../lib/dates'
+import { useToday } from '../../hooks/useToday'
+import { formatLong, formatMonth } from '../../lib/dates'
 
 interface Props {
   month: string
@@ -14,7 +15,7 @@ interface Props {
 const WEEKDAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
 export function MonthCalendar({ month, selected, withEntries, onSelect, onMonth }: Props) {
-  const today = todayKey()
+  const today = useToday()
   return (
     <Card>
       <div className="mb-3 flex items-center justify-between">

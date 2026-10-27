@@ -5,10 +5,12 @@ interface Props {
   tabs: string[]
   active: string
   onChange: (tab: string) => void
+  /** Use for page navigation: plain buttons marked aria-current instead of the tabs pattern. */
+  nav?: boolean
 }
 
 /** Segmented pill control. The highlight slides between tabs via a shared layoutId. */
-export function TabBar({ tabs, active, onChange }: Props) {
+export function TabBar({ tabs, active, onChange, nav = false }: Props) {
   const group = useId()
   const refs = useRef<(HTMLButtonElement | null)[]>([])
 
@@ -23,18 +25,17 @@ export function TabBar({ tabs, active, onChange }: Props) {
   }
 
   return (
-    <div role="tablist" className="relative flex gap-1 rounded-full bg-[var(--hairline)] p-1">
+    <div role={nav ? undefined : 'tablist'} className="relative flex gap-1 rounded-full bg-[var(--hairline)] p-1">
       {tabs.map((tab, i) => {
         const isActive = tab === active
         return (
           <button
             key={tab}
             ref={(el) => { refs.current[i] = el }}
-            role="tab"
-            aria-selected={isActive}
-            tabIndex={isActive ? 0 : -1}
+            {...(nav
+              ? { 'aria-current': isActive ? ('page' as const) : undefined }
+              : { role: 'tab', 'aria-selected': isActive, tabIndex: isActive ? 0 : -1, onKeyDown: (e: React.KeyboardEvent) => onKeyDown(e, i) })}
             onClick={() => onChange(tab)}
-            onKeyDown={(e) => onKeyDown(e, i)}
             className="relative rounded-full px-2.5 py-1.5 text-[13px] font-medium outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] sm:px-4 sm:text-[14px]"
           >
             {isActive && (

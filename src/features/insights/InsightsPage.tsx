@@ -3,7 +3,7 @@ import { Donut } from '../../components/charts/Donut'
 import { Heatmap } from '../../components/charts/Heatmap'
 import { Card } from '../../components/ui/Card'
 import { TabBar } from '../../components/ui/TabBar'
-import { todayKey } from '../../lib/dates'
+import { useToday } from '../../hooks/useToday'
 import { rangeFor, type RangePreset } from '../../lib/ranges'
 import { completionByArea, currentStreak, dailyCountsByArea, longestStreak, neglectedAreas, totalsByArea } from '../../lib/stats'
 import { useStore } from '../../store/storeContext'
@@ -16,7 +16,7 @@ const HEAT_DAYS = 30
 export function InsightsPage() {
   const { data } = useStore()
   const [preset, setPreset] = useState<RangePreset>('Week')
-  const today = todayKey()
+  const today = useToday()
 
   const stats = useMemo(() => {
     const range = rangeFor(preset, today, data.checks)
@@ -57,7 +57,7 @@ export function InsightsPage() {
           <p className="text-[var(--text-muted)]">Add daily habits on the Today tab and check them off. Your charts appear here.</p>
         </Card>
       ) : (
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Card key={`donut-${preset}`}>
             <h2 className="mb-4 text-2xl font-semibold">Where your effort went</h2>
             <Donut

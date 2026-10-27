@@ -4,7 +4,7 @@ import { Card } from '../../components/ui/Card'
 import { downloadJson, parseImport, readFileText } from '../../lib/storage/exportImport'
 import { useStore } from '../../store/storeContext'
 
-/** Backup / restore. Will move to a Settings spot once real pages exist. */
+/** Backup / restore.  */
 export function DataCard() {
   const { data, replace } = useStore()
   const input = useRef<HTMLInputElement>(null)
@@ -22,7 +22,7 @@ export function DataCard() {
   }
 
   return (
-    <Card className="sm:col-span-2">
+    <Card>
       <h2 className="text-2xl font-semibold">Your data</h2>
       <p className="mt-2 text-[var(--text-muted)]">
         {data.areas.length} areas, {data.habits.length} habits, stored in this browser. Export a backup any time.

@@ -27,7 +27,7 @@ export function Checkbox({ checked, onChange, label, color = 'var(--accent)' }: 
         style={{ boxShadow: checked ? 'none' : 'inset 0 0 0 1.5px var(--text-muted)' }}
         className="grid h-6 w-6 shrink-0 place-items-center rounded-full peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--accent)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--bg)]"
       >
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="white" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke={color === 'var(--accent)' ? 'white' : '#1d1d1f'} strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
           <motion.path
             d="M5 12.5l4.5 4.5L19 7.5"
             initial={false}
