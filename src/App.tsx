@@ -6,7 +6,7 @@ import { AreaDetailPage } from './features/areas/AreaDetailPage'
 import { AreasPage } from './features/areas/AreasPage'
 import { InsightsPage } from './features/insights/InsightsPage'
 import { JournalPage } from './features/journal/JournalPage'
-import { ComingSoon } from './features/placeholder/ComingSoon'
+import { LibraryPage } from './features/library/LibraryPage'
 import { TodayPage } from './features/today/TodayPage'
 import { StoreProvider } from './store/StoreProvider'
 
@@ -23,7 +23,7 @@ export default function App() {
               <Route path="areas" element={<AreasPage />} />
               <Route path="areas/:areaId" element={<AreaDetailPage />} />
               <Route path="insights" element={<InsightsPage />} />
-              <Route path="library" element={<ComingSoon title="Library" phase={7} />} />
+              <Route path="library" element={<LibraryPage />} />
               <Route path="design" element={<Showcase />} />
             </Route>
           </Routes>
