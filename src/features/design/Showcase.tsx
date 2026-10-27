@@ -2,10 +2,8 @@ import { useState } from 'react'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Checkbox } from '../../components/ui/Checkbox'
-import { GlassNav } from '../../components/ui/GlassNav'
 import { DataCard } from './DataCard'
 
-const TABS = ['Today', 'Journal', 'Insights', 'Areas', 'Library']
 const SAMPLE = [
   { label: 'Stretch', color: 'var(--area-3)' },
   { label: 'Gym', color: 'var(--area-1)' },
@@ -14,15 +12,13 @@ const SAMPLE = [
 ]
 
 export function Showcase() {
-  const [tab, setTab] = useState(TABS[0])
   const [done, setDone] = useState<Record<string, boolean>>({ Stretch: true })
 
   return (
     <>
-      <GlassNav tabs={TABS} active={tab} onChange={setTab} />
-      <main className="mx-auto max-w-3xl px-5 pb-32 pt-12 sm:pt-28">
+      <div>
         <p className="text-[var(--text-muted)]">Design system</p>
-        <h1 className="mt-1 text-5xl font-semibold sm:text-6xl">{tab}</h1>
+        <h1 className="mt-1 text-5xl font-semibold sm:text-6xl">Components</h1>
         <p className="mt-3 max-w-prose text-lg text-[var(--text-muted)]">
           Tap the tabs, check things off, toggle the theme. This page is only here to lock in the look.
         </p>
@@ -68,7 +64,7 @@ export function Showcase() {
 
           <DataCard />
         </div>
-      </main>
+      </div>
     </>
   )
 }
