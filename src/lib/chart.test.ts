@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { scalePoints, smoothPath } from './chart'
+import { donutSegments, scalePoints, smoothPath } from './chart'
 
 const pad = { top: 0, right: 0, bottom: 0, left: 0 }
 
@@ -32,5 +32,16 @@ describe('smoothPath', () => {
   it('is empty for <2 points and starts with M otherwise', () => {
     expect(smoothPath([{ x: 1, y: 1 }])).toBe('')
     expect(smoothPath([{ x: 0, y: 0 }, { x: 10, y: 5 }]).startsWith('M0.00,0.00 C')).toBe(true)
+  })
+})
+
+describe('donutSegments', () => {
+  it('returns shares and cumulative start offsets', () => {
+    const [a, b, c] = donutSegments([1, 1, 2])
+    expect([a.fraction, b.fraction, c.fraction]).toEqual([0.25, 0.25, 0.5])
+    expect([a.offset, b.offset, c.offset]).toEqual([0, 0.25, 0.5])
+  })
+  it('handles an all-zero total', () => {
+    expect(donutSegments([0, 0])).toEqual([{ fraction: 0, offset: 0 }, { fraction: 0, offset: 0 }])
   })
 })

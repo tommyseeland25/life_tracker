@@ -1,4 +1,5 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { ErrorBoundary } from './ErrorBoundary'
 import { GlassNav } from './ui/GlassNav'
 
 const TABS = [
@@ -22,7 +23,9 @@ export function AppShell() {
         onChange={(label) => navigate(TABS.find((t) => t.label === label)!.path)}
       />
       <main className="mx-auto max-w-4xl px-5 pb-32 pt-12 sm:pt-28">
-        <Outlet />
+        <ErrorBoundary key={pathname}>
+          <Outlet />
+        </ErrorBoundary>
       </main>
     </>
   )

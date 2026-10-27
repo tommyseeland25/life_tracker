@@ -66,3 +66,18 @@ export function smoothPath(pts: { x: number; y: number }[]): string {
   }
   return d
 }
+
+/**
+ * Donut geometry: each value's share of the whole (0-1) and where its arc
+ * starts (also 0-1, clockwise from 12 o'clock). All zeros if the total is 0.
+ */
+export function donutSegments(values: number[]): { fraction: number; offset: number }[] {
+  const total = values.reduce((a, b) => a + b, 0)
+  let offset = 0
+  return values.map((v) => {
+    const fraction = total ? v / total : 0
+    const seg = { fraction, offset }
+    offset += fraction
+    return seg
+  })
+}

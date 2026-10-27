@@ -61,3 +61,19 @@ export function formatShort(key: DateKey): string {
 export function formatMonth(key: DateKey): string {
   return new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric' }).format(fromDateKey(key))
 }
+
+/** Whole days from a to b (b - a). Parses as UTC parts so DST can't shift the result. */
+export function daysBetween(a: DateKey, b: DateKey): number {
+  const utc = (k: DateKey) => {
+    const [y, m, d] = k.split('-').map(Number)
+    return Date.UTC(y, m - 1, d)
+  }
+  return Math.round((utc(b) - utc(a)) / 86_400_000)
+}
+
+/** Every key from start to end, inclusive. Empty if start is after end. */
+export function dateRange(start: DateKey, end: DateKey): DateKey[] {
+  const out: DateKey[] = []
+  for (let d = start; d <= end; d = addDays(d, 1)) out.push(d)
+  return out
+}
