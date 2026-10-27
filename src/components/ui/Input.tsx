@@ -10,3 +10,7 @@ export function TextInput({ className = '', ...props }: InputHTMLAttributes<HTML
 export function Select({ className = '', ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
   return <select className={`${base} ${className}`} {...props} />
 }
+
+export function TextArea({ className = '', ...props }: import('react').TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return <textarea className={`${base} resize-none leading-relaxed ${className}`} {...props} />
+}

@@ -51,3 +51,13 @@ export const todayKey = (): DateKey => toDateKey(new Date())
 export function formatLong(key: DateKey): string {
   return new Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).format(fromDateKey(key))
 }
+
+/** "Tue, Oct 27" */
+export function formatShort(key: DateKey): string {
+  return new Intl.DateTimeFormat(undefined, { weekday: 'short', month: 'short', day: 'numeric' }).format(fromDateKey(key))
+}
+
+/** "October 2026" */
+export function formatMonth(key: DateKey): string {
+  return new Intl.DateTimeFormat(undefined, { month: 'long', year: 'numeric' }).format(fromDateKey(key))
+}
