@@ -3,6 +3,7 @@ import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Checkbox } from '../../components/ui/Checkbox'
 import { GlassNav } from '../../components/ui/GlassNav'
+import { DataCard } from './DataCard'
 
 const TABS = ['Today', 'Journal', 'Insights', 'Areas', 'Library']
 const SAMPLE = [
@@ -64,6 +65,8 @@ export function Showcase() {
               glass, corners are large, and shadows are soft and layered instead of borders.
             </p>
           </Card>
+
+          <DataCard />
         </div>
       </main>
     </>
