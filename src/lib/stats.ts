@@ -1,5 +1,6 @@
 import type { Area, DateKey, Habit } from '../types/models'
-import { todo } from './todo'
+import { addDays, daysBetween } from './dates'
+import { habitsForDate } from './today'
 
 /*
  * INSIGHTS MATH: the numbers behind every chart. This is the heart of the app.
@@ -38,7 +39,17 @@ export function dailyCountsByArea(
   checks: Record<DateKey, string[]>,
   range: DateKey[],
 ): DailyCounts {
-  return todo('dailyCountsByArea', habits, checks, range)
+  // Look up a habit's area in O(1) instead of searching `habits` for every check.
+  const areaOf = new Map(habits.map((h) => [h.id, h.areaId]))
+  const out: DailyCounts = {}
+  for (const h of habits) out[h.areaId] ??= range.map(() => 0)
+  range.forEach((day, i) => {
+    for (const id of checks[day] ?? []) {
+      const areaId = areaOf.get(id)
+      if (areaId) out[areaId][i]++
+    }
+  })
+  return out
 }
 
 /**
@@ -48,7 +59,7 @@ export function dailyCountsByArea(
  *     -> { gym: 1, stretch: 3 }
  */
 export function totalsByArea(counts: DailyCounts): Record<string, number> {
-  return todo('totalsByArea', counts)
+  return Object.fromEntries(Object.entries(counts).map(([id, c]) => [id, c.reduce((a, b) => a + b, 0)]))
 }
 
 /**
@@ -73,7 +84,21 @@ export function completionByArea(
   checks: Record<DateKey, string[]>,
   range: DateKey[],
 ): Record<string, { done: number; possible: number }> {
-  return todo('completionByArea', habits, checks, range)
+  const out: Record<string, { done: number; possible: number }> = {}
+  for (const areaId of new Set(habits.map((h) => h.areaId))) {
+    const mine = habits.filter((h) => h.areaId === areaId)
+    let done = 0
+    let possible = 0
+    for (const day of range) {
+      const shown = habitsForDate(mine, checks, day)
+      if (shown.length === 0) continue
+      possible++
+      const checked = new Set(checks[day] ?? [])
+      if (shown.some((h) => checked.has(h.id))) done++
+    }
+    out[areaId] = { done, possible }
+  }
+  return out
 }
 
 /**
@@ -90,7 +115,15 @@ export function completionByArea(
  * It must cross month/year ends and DST correctly (use addDays).
  */
 export function currentStreak(checks: Record<DateKey, string[]>, habitId: string, today: DateKey): number {
-  return todo('currentStreak', checks, habitId, today)
+  const has = (d: DateKey) => (checks[d] ?? []).includes(habitId)
+  // Today unchecked doesn't break the streak yet; start counting from yesterday.
+  let day = has(today) ? today : addDays(today, -1)
+  let n = 0
+  while (has(day)) {
+    n++
+    day = addDays(day, -1)
+  }
+  return n
 }
 
 /**
@@ -100,7 +133,14 @@ export function currentStreak(checks: Record<DateKey, string[]>, habitId: string
  *   nothing checked                -> 0
  */
 export function longestStreak(checks: Record<DateKey, string[]>, habitId: string): number {
-  return todo('longestStreak', checks, habitId)
+  const days = Object.keys(checks).filter((d) => checks[d].includes(habitId)).sort()
+  let best = 0
+  let run = 0
+  days.forEach((d, i) => {
+    run = i > 0 && addDays(days[i - 1], 1) === d ? run + 1 : 1
+    best = Math.max(best, run)
+  })
+  return best
 }
 
 export interface Neglected {
@@ -132,5 +172,27 @@ export function neglectedAreas(
   today: DateKey,
   windowDays = 7,
 ): Neglected[] {
-  return todo('neglectedAreas', areas, habits, checks, today, windowDays)
+  const out: Neglected[] = []
+  for (const area of areas) {
+    if (area.archived) continue
+    const mine = habits.filter((h) => h.areaId === area.id)
+    const active = mine.filter((h) => !h.archived)
+    if (active.length === 0) continue
+
+    const ids = new Set(mine.map((h) => h.id))
+    let last: DateKey | null = null
+    for (const [day, checked] of Object.entries(checks)) {
+      if (day <= today && checked.some((id) => ids.has(id)) && (!last || day > last)) last = day
+    }
+
+    if (last) {
+      const daysSince = daysBetween(last, today)
+      if (daysSince >= windowDays) out.push({ area, daysSince })
+    } else {
+      // Never checked: only neglected once the oldest active habit is old enough.
+      const oldest = active.map((h) => h.createdAt).sort()[0]
+      if (daysBetween(oldest, today) >= windowDays) out.push({ area, daysSince: null })
+    }
+  }
+  return out.sort((a, b) => (b.daysSince ?? Infinity) - (a.daysSince ?? Infinity) || a.area.order - b.area.order)
 }
