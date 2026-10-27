@@ -10,6 +10,18 @@
   --accent-contrast: #ffffff;
   --hairline: rgb(0 0 0 / 0.06);
 
+  --accent-soft: rgb(0 113 227 / 0.12);
+
+  /* Soft per-area palette for charts and chips */
+  --area-1: #ff9f7a;
+  --area-2: #7ac7ff;
+  --area-3: #8fd9a8;
+  --area-4: #c6a5ff;
+  --area-5: #ffd479;
+  --area-6: #ff8fb1;
+  --area-7: #7fe0d4;
+  --area-8: #a9b4ff;
+
   --radius-card: 24px;
   --radius-control: 14px;
 
@@ -29,6 +41,7 @@
     --text: #f5f5f7;
     --text-muted: #98989d;
     --accent: #2997ff;
+    --accent-soft: rgb(41 151 255 / 0.18);
     --hairline: rgb(255 255 255 / 0.08);
     --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.4);
   }
@@ -41,6 +54,7 @@
   --text: #f5f5f7;
   --text-muted: #98989d;
   --accent: #2997ff;
+  --accent-soft: rgb(41 151 255 / 0.18);
   --hairline: rgb(255 255 255 / 0.08);
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.4);
 }
